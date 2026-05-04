@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <list>
+using namespace std;
+
+struct Graph {
+    int V;
+    vector<list<int>> adj;
+
+    Graph(int vertices) : V(vertices) {
+        adj.resize(V);
+    }
+
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+    }
+
+    // ПОДСЧЁТ ПОЛУСТЕПЕНИ ЗАХОДА
+    vector<int> countInDegree() {
+        //вектор чисел, который содержит V элементов, и каждый из них равен 0.
+        vector<int> inDegree(V, 0);
+
+        for (int i = 0; i < V; i++) {
+            for (int neighbor : adj[i]) {
+                inDegree[neighbor]++;
+            }
+        }
+
+        return inDegree;
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    int V, E;
+    cout << "Введите количество вершин: ";
+    cin >> V;
+    cout << "Введите количество рёбер: ";
+    cin >> E;
+
+    Graph g(V);
+
+    cout << "Введите " << E << " рёбер (формат: from to):\n";
+    for (int i = 0; i < E; i++) {
+        int u, v;
+        cin >> u >> v;
+        g.addEdge(u, v);
+    }
+
+    // ВЫВОД ПОЛУСТЕПЕНЕЙ ЗАХОДА
+    vector<int> inDegree = g.countInDegree();
+
+    cout << "\nПолустепень захода каждой вершины:\n";
+    for (int i = 0; i < V; i++) {
+        cout << "Вершина " << i << ": " << inDegree[i] << endl;
+    }
+
+    return 0;
+}
