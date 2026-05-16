@@ -1,84 +1,152 @@
 #include <iostream>
 #include <vector>
-#include <list>
+#include <queue>
 #include <stack>
+#include <list>
+#include <algorithm>
 using namespace std;
 
-//сильно связные компоненты графа  Это группы вершин, где из каждой вершины можно добраться до любой другой внутри этой группы.
-struct Graph {
-    int V;
-    vector<list<int>> adj;   // обычный граф
-    vector<list<int>> revAdj; // обратный граф (все рёбра наоборот)
 
+//Сначала запомни порядок обхода графа с помощью BFS, 
+// затем обходи транспонированный граф в обратном порядке — 
+// каждый такой обход даст одну сильно связную компоненту
+
+//Внутри одной сильно связной компоненты каждая вершина может
+//"добраться" до каждой другой(и наоборот), перемещаясь только по 
+//стрелкам(ориентированным рёбрам).
+struct Graph {
+    int V; // Количество вершин в графе
+    vector<list<int>> adj; // Список смежности
+    vector<list<int>> adjRev; // Список смежности для транспонированного графа
+
+    // Конструктор
     Graph(int vertices) : V(vertices) {
         adj.resize(V);
-        revAdj.resize(V);
+        adjRev.resize(V);
     }
 
-    // Добавление ребра
-    void addEdge(int from, int to) {
-        adj[from].push_back(to);      // обычное ребро
-        revAdj[to].push_back(from);   // обратное ребро (для алгоритма)
+    // Добавление ориентированного ребра
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);      // Добавляем в исходный граф
+        adjRev[v].push_back(u);   // Добавляем в транспонированный граф
     }
 
-    // ШАГ 1: Обычный DFS - запоминаем порядок выхода
-    void dfs1(int v, vector<bool>& visited, stack<int>& st) {
-        visited[v] = true;
+    // BFS для обхода графа
+    void BFS(int start, vector<bool>& visited, vector<int>& component) {
+        queue<int> q;
+        visited[start] = true;
+        q.push(start);
 
-        for (int neighbor : adj[v]) {
-            if (!visited[neighbor]) {
-                dfs1(neighbor, visited, st);
-            }
-        }
-        st.push(v); // запоминаем вершину после обработки
-    }
+        while (!q.empty()) {
+            int v = q.front();
+            q.pop();
+            component.push_back(v);
 
-    // ШАГ 2: DFS на обратном графе - находим одну компоненту
-    //Ключевая идея : На обратном графе все вершины, которых мы можем
-    //достичь из v — это те, кто может достичь v в прямом графе.Вместе 
-    //они образуют сильную компоненту.
-    void dfs2(int v, vector<bool>& visited, vector<int>& component) {
-        visited[v] = true;
-        component.push_back(v);
-
-        for (int neighbor : revAdj[v]) {
-            if (!visited[neighbor]) {
-                dfs2(neighbor, visited, component);
+            // Перебираем всех соседей
+            for (int neighbor : adj[v]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
             }
         }
     }
 
-    // Главная функция
-    void findStrongComponents() {
-        stack<int> st;
+    // BFS на транспонированном графе
+    void BFSOnTranspose(int start, vector<bool>& visited, vector<int>& component) {
+        queue<int> q;
+        visited[start] = true;
+        q.push(start);
+
+        while (!q.empty()) {
+            int v = q.front();
+            q.pop();
+            component.push_back(v);
+
+            // Используем транспонированный граф
+            for (int neighbor : adjRev[v]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
+            }
+        }
+    }
+
+    // Первый проход: заполняем порядок завершения (используем BFS, но порядок не сохраняется,
+    // поэтому используем стек для эмуляции порядка)
+    void fillOrder(int start, vector<bool>& visited, stack<int>& Stack) {
+        queue<int> q;
+        vector<int> order;
+
+        visited[start] = true;
+        q.push(start);
+
+        while (!q.empty()) {
+            int v = q.front();
+            q.pop();
+            order.push_back(v);
+
+            for (int neighbor : adj[v]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
+            }
+        }
+
+        // Добавляем вершины в стек в обратном порядке
+        for (int i = order.size() - 1; i >= 0; i--) {
+            Stack.push(order[i]);
+        }
+    }
+
+    // Основная функция для поиска SCC
+    vector<vector<int>> findSCCs() {
+        stack<int> Stack;
         vector<bool> visited(V, false);
 
-        // ШАГ 1: Запускаем DFS на обычном графе
+        // Шаг 1: Заполняем порядок вершин (имитируем порядок завершения DFS)
         for (int i = 0; i < V; i++) {
             if (!visited[i]) {
-                dfs1(i, visited, st);
+                fillOrder(i, visited, Stack);
             }
         }
 
-        // ШАГ 2: Запускаем DFS на обратном графе
-        vector<bool> visitedRev(V, false);
-        vector<vector<int>> allComponents;
+        // Шаг 2: Обходим транспонированный граф в порядке из стека
+        fill(visited.begin(), visited.end(), false);
+        vector<vector<int>> sccs;
 
-        while (!st.empty()) {
-            int v = st.top();
-            st.pop();
+        while (!Stack.empty()) {
+            int v = Stack.top();
+            Stack.pop();
 
-            if (!visitedRev[v]) {
+            if (!visited[v]) {
                 vector<int> component;
-                dfs2(v, visitedRev, component);
-                allComponents.push_back(component);
+                BFSOnTranspose(v, visited, component);
+                sccs.push_back(component);
             }
         }
-        cout << "Найдено компонент: " << allComponents.size() << endl << endl;
 
-        for (int i = 0; i < allComponents.size(); i++) {
-            for (int vertex : allComponents[i]) {
-                cout << vertex << " ";
+        return sccs;
+    }
+
+    // Вывод графа
+    void printGraph() {
+        cout << "\nИсходный граф (список смежности):\n";
+        for (int i = 0; i < V; i++) {
+            cout << i << ": ";
+            for (int x : adj[i]) {
+                cout << x << " ";
+            }
+            cout << endl;
+        }
+
+        cout << "\nТранспонированный граф (список смежности):\n";
+        for (int i = 0; i < V; i++) {
+            cout << i << ": ";
+            for (int x : adjRev[i]) {
+                cout << x << " ";
             }
             cout << endl;
         }
@@ -96,14 +164,34 @@ int main() {
 
     Graph g(V);
 
-    cout << "Введите " << E << " рёбер (from to):\n";
+    cout << "Введите " << E << " рёбер (формат: from to):\n";
     for (int i = 0; i < E; i++) {
         int u, v;
         cin >> u >> v;
         g.addEdge(u, v);
     }
 
-    g.findStrongComponents();
+    g.printGraph();
+
+    // Находим все сильно связные компоненты
+    vector<vector<int>> sccs = g.findSCCs();
+
+    // Выводим результат
+    cout << "РЕЗУЛЬТАТ: СИЛЬНО СВЯЗНЫЕ КОМПОНЕНТЫ\n";
+
+    if (sccs.empty()) {
+        cout << "Компоненты не найдены.\n";
+    }
+    else {
+        cout << "Найдено " << sccs.size() << " сильно связных компонент(ы):\n\n";
+        for (size_t i = 0; i < sccs.size(); i++) {
+            cout << "SCC " << i + 1 << ": { ";
+            for (int vertex : sccs[i]) {
+                cout << vertex << " ";
+            }
+            cout << "}\n";
+        }
+    }
 
     return 0;
 }
