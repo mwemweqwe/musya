@@ -1,6 +1,6 @@
 static SoundHandle cachedShotSound = nullptr; 
 
-void ApplyOnSpawn(Object obj) {
+void ApplyOnSpawn(Object &obj) {
     if (!obj.bullet.enabled) {
         return;
     }
