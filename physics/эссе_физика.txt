@@ -256,5 +256,27 @@ Blue Brain остается единственной платформой, по�
 
 
 
+Список использованных источников
+1.	Никитенков Н.Н., Никитенкова Н.А. Синергетика для инженеров: учебное пособие / Н.Н. Никитенков, Н.А. Никитенкова – Томск: Изд-во Томского политехнического университета, 2009.
+2.	Prigogine I., Stengers I. Order out of Chaos. – Bantam Books, 1984.
+3.	Haken H. Synergetics of the Brain. – Springer-Verlag, 1983.
+4.	Hodgkin A. L., Huxley A. F. A quantitative description of membrane current // J. Physiol. – 1952. – Vol. 117. – P. 500-544.
+5.	Хакен Г. Синергетика: Иерархии неустойчивостей в самоорганизующихся системах и устройствах. – М.: Мир, 1985.
+6.	Markram H. The Blue Brain Project // Nature Reviews Neuroscience. – 2006. – Vol. 7. – P. 153-160.
+7.	Muhammad A.J. and Markram H. (2005). NEOBASE: databasing the neocortical microcircuit. Stud. Health Technol. Inform. 112, 167–177;
+8.	Henry Markram. (2006). The Blue Brain Project. Nat Rev Neurosci. 7, 153-160;
+9.	S. L. Hill, Y. Wang, I. Riachi, F. Schurmann, H. Markram. (2012). Statistical connectivity provides a sufficient foundation for specific functional connectivity in neocortical neural microcircuits. Proceedings of the National Academy of Sciences. 109, E2885-E2894;
+10.	Allen Brain Atlas: транскриптом мозга;
+11.	Christof Koch, R. Clay Reid. (2012). Observatories of the mind. Nature. 483, 397-398.
+12.	Markram H. et al. Reconstruction and Simulation of Neocortical Microcircuitry // Cell. – 2015. – Vol. 163, № 2. – P. 456–492.
+13.	Reimann M. W. et al. Cliques of Neurons Bound into Cavities Provide a Missing Link between Structure and Function // Frontiers in Computational Neuroscience. – 2017. – Vol. 11. – Art. 48.
+14.	Chindemi G. et al. A calcium-based plasticity model for predicting long-term potentiation and depression in the neocortex // Nature Communications. – 2022. – Vol. 13. – Art. 3038.
+15.	Bi G. Q., Poo M. M. Synaptic modifications in cultured hippocampal neurons: dependence on spike timing, synaptic strength, and postsynaptic cell type // Journal of Neuroscience. – 1998. – Vol. 18, № 24. – P. 10464-10472.
+16.	Amunts, K., et al. (2022). EBRAINS: A digital European infrastructure for the human brain. Science, 375(6581), 604-605.
+17.	EBRAINS Research Infrastructure. (2024). Annual Impact Report. Brussels: EBRAINS AISBL.
+18.	Casali, S., et al. (2022). Integration of Allen Institute data into the Blue Brain workflow. Frontiers in Neuroinformatics, 16, 85.
+19.	Hertz, U., et al. (2023). Computational scaling of brain simulations: BBP vs SPAUN. Nature Computational Science, 3, 112-124.
+20.	Logiaco, L., et al. (2021). Thalamocortical simulations in the Blue Brain Project. Neuron, 109(22).
+
 
 
