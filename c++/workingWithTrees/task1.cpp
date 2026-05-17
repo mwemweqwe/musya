@@ -85,4 +85,36 @@ int getHeight(tree* node) {
     return max(leftHeight, rightHeight) + 1;
 }
 
+int main() {
+    setlocale(LC_ALL, "Russian");
+    tree* root = NULL;
+    int n, x;
 
+    cout << "Введите количество элементов: ";
+    cin >> n;
+
+    cout << "Введите " << n << " целых чисел: ";
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        root = insert(root, x);
+    }
+
+    cout << "\nПостроенное бинарное дерево:" << endl;
+    printBinaryTree(root);
+    cout << endl;
+
+    cout << "Введите значение узла X для поиска: ";
+    cin >> x;
+
+    tree* foundNode = findNode(root, x);
+
+    if (foundNode != NULL) {
+        int height = getHeight(foundNode);
+        cout << "Высота узла " << x << " (расстояние до самого глубокого листа): " << height << endl;
+    }
+    else {
+        cout << "Узел " << x << " не найден в дереве!" << endl;
+    }
+
+    return 0;
+}

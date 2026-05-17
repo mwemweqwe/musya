@@ -21,7 +21,6 @@ tree* node(Item x) {
     return n;
 }
 
-
 // Проверка, является ли узел листом
 bool isLeaf(tree* node) {
     return (node != NULL && node->left == NULL && node->right == NULL);
@@ -67,3 +66,36 @@ void printBinaryTree(tree* root, int level = 0) {
     }
 }
 
+int main() {
+    setlocale(LC_ALL, "Russian");
+    tree* root = NULL;
+    int n, x;
+
+    cout << "Введите количество элементов: ";
+    cin >> n;
+
+    if (n == 0) {
+        cout << "Список пуст!" << endl;
+        return 0;
+    }
+
+    cout << "Введите " << n << " целых чисел: ";
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        root = insert(root, x);
+    }
+
+    cout << "\nПостроенное бинарное дерево:" << endl;
+    printBinaryTree(root);
+    cout << endl;
+
+    cout << "Четные листья: ";
+    bool found = false;
+    printEvenLeaves(root, found);
+
+    if (!found) {
+        cout << "Четных листьев нет!";
+    }
+    cout << endl;
+    return 0;
+}
