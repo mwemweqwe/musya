@@ -85,6 +85,29 @@ int getHeight(tree* node) {
     return max(leftHeight, rightHeight) + 1;
 }
 
+// Функция для вывода бинарного дерева только числами
+void printBinaryTree(tree* root, int level = 0) {
+    if (root == NULL) {
+        return;
+    }
+
+    // Выводим правое поддерево (с отступами)
+    if (root->right != NULL) {
+        printBinaryTree(root->right, level + 1);
+    }
+
+    // Выводим текущий узел с отступами
+    for (int i = 0; i < level; i++) {
+        cout << "    ";
+    }
+    cout << root->inf << endl;
+
+    // Выводим левое поддерево
+    if (root->left != NULL) {
+        printBinaryTree(root->left, level + 1);
+    }
+}
+
 int main() {
     setlocale(LC_ALL, "Russian");
     tree* root = NULL;
