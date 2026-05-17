@@ -21,6 +21,41 @@ tree* node(Item x) {
     return n;
 }
 
+// Вставка узла в дерево бинарного поиска
+tree* insert(tree* root, Item x) {
+    if (root == NULL) {
+        return node(x);
+    }
+
+    tree* current = root;
+    tree* parent = NULL;
+
+    while (current != NULL) {
+        parent = current;
+        if (x < current->inf) {
+            current = current->left;
+        }
+        else if (x > current->inf) {
+            current = current->right;
+        }
+        else {
+            return root;
+        }
+    }
+
+    tree* newNode = node(x);
+    newNode->parent = parent;
+
+    if (x < parent->inf) {
+        parent->left = newNode;
+    }
+    else {
+        parent->right = newNode;
+    }
+
+    return root;
+}
+
 // Проверка, является ли узел листом
 bool isLeaf(tree* node) {
     return (node != NULL && node->left == NULL && node->right == NULL);
