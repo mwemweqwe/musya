@@ -1,15 +1,6 @@
-static SoundHandle cachedShotSound = nullptr; 
-
-void ApplyOnSpawn(Object &obj) {
-    if (!obj.bullet.enabled) {
-        return;
-    }
-
-    if (cachedShotSound == nullptr) {
-        cachedShotSound = LoadSound("Assets/Sounds/shot.mp3");
-    }
-
-    if (cachedShotSound != nullptr) {
-        PlaySound(cachedShotSound);
+void ApplyOnSpawn(Context& ctx, Object& obj) {
+    if (obj.bullet.enabled) {
+        Sound shotSound = LoadSound("Assets/Sounds/shot.mp3");
+        PlaySound(shotSound);
     }
 }
