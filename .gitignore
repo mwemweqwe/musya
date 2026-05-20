@@ -1,0 +1,11 @@
+# Compiled files 
+*.exe 
+*.out 
+*.o 
+*.obj 
+# Temporary files 
+*.tmp 
+*~ 
+# IDE files 
+.vscode/ 
+.idea/ 
